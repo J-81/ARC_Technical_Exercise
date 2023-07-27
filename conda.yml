@@ -1,0 +1,16 @@
+name: main
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - astrobiomike
+  - qiime2
+dependencies:
+  - fastqc
+  - multiqc
+  - nextflow
+  - bbmap
+  - megahit
+  - mmseqs2
+  - entrez-direct
+  - bowtie2
