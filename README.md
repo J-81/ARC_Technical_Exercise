@@ -40,6 +40,7 @@ A csv or txt report including the following fields:
 * Mean and standard deviation of library insert sizes after adapter removal {bbmerge after bbduk}
 * RefSeq or Genbank accession numbers of the sequenced organism. {entrez-direct approach}
   * Identify taxon ids via assembly-based approach & mmseq2 taxonomy
+    * ? Most prevalent species 320324 by assembly prevalence in taxonomyResult_report
   * Compare to read based approach quimme2+motus
   * `esearch -db taxonomy -query "txid320324[Organism:exp]" | elink -target assem
 bly | efetch -format docsum  | xtract -pattern DocumentSummary -element RefSeq`
@@ -50,4 +51,4 @@ bly | efetch -format docsum  | xtract -pattern DocumentSummary -element RefSeq`
   * Downloading genome fna for build:
     * `wget "$(esearch -db assembly -query "GCF_000716445.1" | efetch -format docsum | xtract -pattern DocumentSummary -element FtpPath_RefSeq | awk -F"/" '{print $0"/"$NF"_genomic.fna.gz"}')"`
   * Align with bowtie2 to top representative genomes from NCBI and plot
-    * build: `bowtie2-build /workspace/entrez_direct/GCF_000716445.1_ASM71644v1_genomic.fna Streptomyces_wedmorensis`
+    * build (seems like it can use multiple references): `bowtie2-build /workspace/entrez_direct/GCF_000716445.1_ASM71644v1_genomic.fna Streptomyces_wedmorensis`
