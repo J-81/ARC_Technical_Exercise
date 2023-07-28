@@ -118,8 +118,8 @@ workflow {
         ALIGN_BOWTIE2.out.sam | SAMTOOLS_SORT | SAMTOOLS_INDEX | EXTRACT_PER_BASE_QUALITY
 
         GENERATE_REPORTS(
-          MEGAHIT.out.log, // For insert size
-          TRIMMED_FASTQC.out.report_zip, // For plot, per position quality
+          MEGAHIT.out.log, // For insert size mean and s.d.
+          TRIMMED_FASTQC.out.report_zip, // For number of molecules sequenced, for sequencing configuration, libary type, For plot, per position quality 
           EXTRACT_PER_BASE_QUALITY.out.per_base_position_quality, // For plot, per postion alignment quality
           GET_NCBI_TAXONOMY.out.taxonomy // For text report, species name and ncbi taxid 
           BUILD_BOWTIE2_REFERENCE.out.full_reference_list // For text report, species genome accessions
