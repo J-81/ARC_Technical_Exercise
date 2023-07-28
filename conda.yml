@@ -3,8 +3,6 @@ channels:
   - conda-forge
   - bioconda
   - defaults
-  - astrobiomike
-  - qiime2
 dependencies:
   - fastqc
   - multiqc
@@ -14,3 +12,11 @@ dependencies:
   - mmseqs2
   - entrez-direct
   - bowtie2
+  - samtools
+  - spades
+  - kraken2
+  - rsync
+  - motus=3.1.0
+  - bcftools
+  # - humann
+  # - metaphlan

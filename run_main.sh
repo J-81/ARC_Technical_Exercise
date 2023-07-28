@@ -9,5 +9,4 @@ nextflow run $MAIN \
     --reads_dir /workspace/data \
     --bbduk_adapters /workspace/bbmap_install/bbmap/resources/adapters.fa \
     --meta_sample_name ARC_TEST_SAMPLE \
-    --cat_db_name CAT_prepare_20210107 \
-     $@
+    $@

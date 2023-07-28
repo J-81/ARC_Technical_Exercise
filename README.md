@@ -1,6 +1,20 @@
 # ARC_Technical_Exercise
 
+
 ## Manual First Commands
+
+Mamba
+
+```
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+bash Mambaforge-$(uname)-$(uname -m).sh
+```
+
+Install env
+
+```
+mamba env create -f /workspace/ARC_Technical_Exercise/conda.yml
+```
 
 Install bbduk from sourceforge: https://sourceforge.net/projects/bbmap/
 
@@ -9,6 +23,11 @@ add to Path
 ```
 export PATH="/workspace/bbmap_install/bbmap":$PATH
 ```
+
+### Humann & Metaphlan
+
+- humann_databases --download chocophlan full humann_db
+- metaphlan --install
 
 ### Qiime2 & mOTUs
 
@@ -28,6 +47,20 @@ cd q2-mOTUs
 make install
 ```
 
+> Requires around ? storage
+
+> Needed fix to update tzlocal package as made evident by `make test`
+> After that failing tests seem due to version of underlying db (3 in test expect, 31 in test results)
+> pip install 'tzlocal>=5.0'
+
+
+## Running qiime2-motus
+
+- Import data as per: /workspace/install_qiime2/test_q2-mOTUs/imported_data
+
+- qiime motus profile --i-samples imported_data/ARC_data.qza --p-threads 8 --o-table artifacts/motu-table.qza --o-taxonomy artifacts/motu-taxonomy.qza
+
+- Can also just run direct motus, might be reasonable since qiime gives extra overhead (unless plotting can be figured out)
 
 
 ### Deliverables
@@ -52,3 +85,4 @@ bly | efetch -format docsum  | xtract -pattern DocumentSummary -element RefSeq`
     * `wget "$(esearch -db assembly -query "GCF_000716445.1" | efetch -format docsum | xtract -pattern DocumentSummary -element FtpPath_RefSeq | awk -F"/" '{print $0"/"$NF"_genomic.fna.gz"}')"`
   * Align with bowtie2 to top representative genomes from NCBI and plot
     * build (seems like it can use multiple references): `bowtie2-build /workspace/entrez_direct/GCF_000716445.1_ASM71644v1_genomic.fna Streptomyces_wedmorensis`
+  * Alternatively, align to assembled contigs using bowtie2, seems to be done

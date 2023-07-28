@@ -32,7 +32,7 @@ process BBMERGE {
   
   script:
   """
-  bbmerge.sh in1=${read_1} in2=${read_2} out=bbmerged.fastq.gz outu1="unbbmerged_${read_1}" outu2="unbbmerged_${read_2}" > bbmerge.log
+  bbmerge-auto.sh in1=${read_1} in2=${read_2} out=bbmerged.fastq.gz outu1="unbbmerged_${read_1}" outu2="unbbmerged_${read_2}" &> bbmerge.log
   """
 }
 
@@ -66,54 +66,19 @@ process MEGAHIT {
         -o ${meta_sample_name} --min-contig-len 500
   """
 }
-/*
 
-process GET_CAT_DB {
-    storeDir "CAT_DB"
-
+process MOTUS_PROFILE {
   input:
-    val(target_db_name)
-    
-  output:
-    path(target_db_name)
-
-  script:
-  """
-  wget 'https://tbb.bio.uu.nl/bastiaan/CAT_prepare/${target_db_name}.tar.gz'
-  tar -xvzf ${target_db_name}.tar.gz
-  """
-}
-
-process CAT {
-  input:
-    path(contig_fa)
-    path(CAT_DB)
-  
+    tuple path(read_1), path(read_2)
+    val(meta_sample_name)
   output:
   
   script:
   """
-  CAT contigs -c ${contig_fa} -d ${CAT_DB} \
-            -t CAT_prepare_20200618/2020-06-18_taxonomy/ -p sample-1-genes.faa \
-            -o sample-1-tax-out.tmp -n 15 -r 3 --top 4 --I_know_what_Im_doing
+  motus profile -f ${read_1} -r ${read_2} -t ${task.cpus}
   """
 }
 
-process RENAME_AND_SUMMARIZE_CONTIGS {
-  input:
-    path(contig_dir)
-  output:
-    path("${meta_sample_name}.fasta"), emit: renamed_contigs
-    path("assembly-summaries.tsv"), emit: assembly_sumary
-  
-  script:
-  """
-  bit-rename-fasta-headers -i ${contig_dir}/final.contigs.fa -w c_${meta_sample_name} -o ${meta_sample_name}.fasta
-  bit-summarize-assembly -o assembly-summaries.tsv ${meta_sample_name}.fasta
-
-  """
-}
-*/
 workflow {
     main:
         ch_reads = Channel.fromPath(params.reads_dir + "/*.fastq.gz") | collect
@@ -128,8 +93,36 @@ workflow {
 
         MULTIQC(RAW_FASTQC.out.fastqc_zip | mix(TRIM_FASTQC.out.fastqc_zip) | collect)
 
-        MEGAHIT( BBDUK.out.trimmed_reads, params.meta_sample_name)
-        BBMERGE( BBDUK.out.trimmed_reads)
+        // Assembly for determining insert size
+        //   If data had higher coverage and resources allowed, assembly based taxonomy assessment could be performed
+        //  Testing with mmseq2 Swissprot database on assembly yielded 'Bacteroides_thetaiotaomicron' but low confidence w/ alignment to 48 reference genome sample for species yielding low alignment rates (<6%)
+        //  Resource limitation: mainly reference database on disk limits
+        MEGAHIT( BBDUK.out.trimmed_reads, params.meta_sample_name )
 
-        // CAT( RENAME_AND_SUMMARIZE_CONTIGS.out.renamed_contigs, GET_CAT_DB.out.CAT_DB )
+        MOTUS_SETUP() // Run Motus setup once to motus database
+
+        MOTUS_PROFILE( BBDUK.out.trimmed_reads, params.meta_sample_name )
+
+        MOTUS_PROFILE.out.top_species | GET_NCBI_TAXONOMY
+        
+        BUILD_BOWTIE2_REFERENCE( 
+          GET_NCBI_TAXONOMY.out.taxonomy, 
+          params.number_genome_representatives 
+          )
+
+        ALIGN_BOWTIE2( 
+          BUILD_BOWTIE2_REFERENCE.out.reference,
+          BBDUK.out.trimmed_reads
+          )
+
+        ALIGN_BOWTIE2.out.sam | SAMTOOLS_SORT | SAMTOOLS_INDEX | EXTRACT_PER_BASE_QUALITY
+
+        GENERATE_REPORTS(
+          MEGAHIT.out.log, // For insert size
+          TRIMMED_FASTQC.out.report_zip, // For plot, per position quality
+          EXTRACT_PER_BASE_QUALITY.out.per_base_position_quality, // For plot, per postion alignment quality
+          GET_NCBI_TAXONOMY.out.taxonomy // For text report, species name and ncbi taxid 
+          BUILD_BOWTIE2_REFERENCE.out.full_reference_list // For text report, species genome accessions
+          )
+        
 }
