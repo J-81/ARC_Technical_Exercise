@@ -35,6 +35,12 @@ The output files are located in the `final_test` directory include organized rel
 
 Most importantly, the requested text report is located at `full_report/report.txt` and the requested plot is located at `full_report/Quality_scores.png`.
 
+## Resources and Runtime
+
+For the example dataset, peak resource usage was no more than 4 GB RAM on a system that utilized up to 16 cpus.  Runtime for this dataset was under 5 minutes and expected to scale linearly with respect to mOTU profiling and alignment.  With respect to assembly (performed using Megahit), memory and runtime scaling for may be worse than linear; however, this hasn't yet been tested.
+
+Full resource usage profiling has been performed using Nextflow Tower.
+
 ## Known Issues
 
 A permissions issue within the container currently prevents the container from being run internally as the host user.
