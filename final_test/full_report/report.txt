@@ -1,1 +1,66 @@
-/workspace/ARC_Technical_Exercise/work/fa/d06c5b91aee41d483136ef7b06458f/report.txt
+Sequenced Reads: 100000
+R1 Length: 300
+R2 Length: 300
+R1 Index: CTTGTGGTGGTA
+R2 Index: CTTGTGGTGGTA
+Insert Size Mean and S.D.
+484.00
+151.52
+Library Type (inferred by adapters in raw fastQC): Nextera
+Species Idenfification using mOTUs:
+  Top Species:  Bacteroides eggerthii
+  Reference Genomes For Top Species:
+    - GCF_030371675.1
+    - GCF_027688755.1
+    - GCF_027669815.1
+    - GCF_027664005.1
+    - GCF_025146565.1
+    - GCF_024125285.1
+    - GCF_022355405.1
+    - GCF_019733495.1
+    - GCF_019131075.1
+    - GCF_019130965.1
+    - GCF_019130845.1
+    - GCF_019130835.1
+    - GCF_019130725.1
+    - GCF_019130655.1
+    - GCF_019130635.1
+    - GCF_019130595.1
+    - GCF_019130525.1
+    - GCF_019130315.1
+    - GCF_019130295.1
+    - GCF_019130275.1
+    - GCF_019130255.1
+    - GCF_019130235.1
+    - GCF_019130155.1
+    - GCF_019130015.1
+    - GCF_019129875.1
+    - GCF_019129815.1
+    - GCF_019041995.1
+    - GCF_019041395.1
+    - GCF_018786085.1
+    - GCF_018289295.1
+    - GCF_016894205.1
+    - GCF_015560775.1
+    - GCF_015555985.1
+    - GCF_015555125.1
+    - GCF_015551485.1
+    - GCF_012844125.1
+    - GCF_008571695.1
+    - GCF_008571605.1
+    - GCF_902373795.1
+    - GCF_005845315.1
+    - GCF_004168485.1
+    - GCF_003475335.1
+    - GCF_003472985.1
+    - GCF_003472445.1
+    - GCF_003471525.1
+    - GCF_003470085.1
+    - GCF_003467605.1
+    - GCF_003467285.1
+    - GCF_003460345.1
+    - GCF_900445565.1
+    - GCF_000273465.1
+    - GCF_000185605.1
+    - GCF_000155815.1
+    - GCF_000436515.1
