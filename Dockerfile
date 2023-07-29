@@ -26,11 +26,8 @@ RUN tar -xzf assets/BBMap_39.01.tar.gz -C /opt/conda/envs/main/bin/
 # Copy in nextflow workflow code and data
 COPY modules modules
 COPY main.nf main.nf
-COPY test_data test_data
-COPY stub_data stub_data
 COPY bin bin
 
 USER root
 RUN apt-get update && apt-get install unzip
-USER mambauser
 

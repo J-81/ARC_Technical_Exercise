@@ -2,7 +2,7 @@ include { FASTQC as RAW_FASTQC } from "./modules/FASTQC.nf"
 include { FASTQC as TRIM_FASTQC} from "./modules/FASTQC.nf"
 
 process BBDUK {
-  publishDir 'bbduk_out'
+  publishDir "${params.output}/bbduk_out"
 
   input:
     tuple path(read_1), path(read_2)
