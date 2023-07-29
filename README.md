@@ -39,4 +39,4 @@ Most importantly, the requested text report is located at `full_report/report.tx
 
 A permissions issue within the container currently prevents the container from being run internally as the host user.
 
-The planned fix is the fix permissions within the container; however, storage limitations in the development environment prevented this from being completed in time.
+The planned fix is simply updating the permissions within the container for the mOTU databases; however, storage limitations in the development environment prevented this from being completed in time.
